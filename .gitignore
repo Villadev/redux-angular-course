@@ -18,3 +18,5 @@ bin-release/
 # information for Eclipse / Flash Builder.
 /01-redux-basic/package-lock.json
 /01-redux-basic/node_modules/
+/02-redux-app_old/package-lock.json
+/02-redux-app/package-lock.json
