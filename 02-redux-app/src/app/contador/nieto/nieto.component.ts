@@ -1,19 +1,26 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {AppState} from "../../app.reducers";
+import {Store} from "@ngrx/store";
+import {Component, OnInit} from "@angular/core";
+import {reset} from "../contador.actions";
 
 @Component({
-  selector: 'app-nieto',
+  selector: "app-nieto",
   templateUrl: './nieto.component.html',
   styles: []
 })
-export class NietoComponent {
-  @Input()
+export class NietoComponent implements OnInit{
   public contador;
-  @Output()
-  public contadorCambio: EventEmitter<number> = new EventEmitter<number>();
+
+  constructor(private store: Store<AppState>) {
+  }
+
+  public ngOnInit() {
+    this.store.select('contador')
+        .subscribe((contador) => this.contador = contador);
+  }
 
   public reset() {
-    this.contador = 0;
-    this.contadorCambio.emit(this.contador);
+    this.store.dispatch(reset());
   }
 
 }

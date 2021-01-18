@@ -1,24 +1,35 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+
 
 import {AppComponent} from './app.component';
 import {HijoComponent} from "./contador/hijo/hijo.component";
 import {NietoComponent} from "./contador/nieto/nieto.component";
+
+import {contadorReducer} from "./contador/contador.reducer";
 import {StoreModule} from "@ngrx/store";
+import {NgModule} from "@angular/core";
+import {FormsModule} from "@angular/forms";
+
+import {StoreDevtoolsModule} from '@ngrx/store-devtools';
+import {environment} from "../environments/environment";
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HijoComponent,
-    NietoComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    StoreModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        HijoComponent,
+        NietoComponent
+    ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        StoreModule.forRoot({contador: contadorReducer}),
+        StoreDevtoolsModule.instrument({
+            maxAge: 25, // Retains last 25 states
+            logOnly: environment.production, // Restrict extension to log-only mode
+        })
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
