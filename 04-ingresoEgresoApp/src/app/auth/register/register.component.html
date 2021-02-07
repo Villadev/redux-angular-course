@@ -47,10 +47,18 @@
 
                         <div class="form-group">
                             <button type="submit"
+                                    *ngIf="!isLoading"
                                     [disabled]="registroForm.invalid"
-                                    class="btn btn-primary submit-btn btn-block"
-                            >
+                                    class="btn btn-primary submit-btn btn-block">
                                 Crear cuenta
+                            </button>
+
+                            <button type="button"
+                                    [disabled]="true"
+                                    *ngIf="isLoading"
+                                    class="btn btn-primary submit-btn btn-block">
+                                <i class="fa fa-spin fa-sync"></i>
+                                Espere...
                             </button>
                         </div>
                         <div class="text-block text-center my-3">
@@ -61,8 +69,6 @@
 
 
                     </form>
-
-
                 </div>
             </div>
         </div>
