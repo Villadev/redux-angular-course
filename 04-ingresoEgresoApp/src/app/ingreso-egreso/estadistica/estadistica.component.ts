@@ -1,4 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Store} from "@ngrx/store";
+import {AppState} from "../../app.reducer";
+import {IngresoEgreso} from "../../models/ingreso-egreso.model";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
+import {Label, MultiDataSet} from "ng2-charts";
 
 @Component({
   selector: 'app-estadistica',
@@ -6,11 +12,43 @@ import {Component, OnInit} from '@angular/core';
   styles: [
   ]
 })
-export class EstadisticaComponent implements OnInit {
+export class EstadisticaComponent implements OnInit, OnDestroy {
+  ingresos = 0;
+  egresos = 0;
+  totalIngreos = 0;
+  totalEgresos = 0;
 
-  constructor() { }
+  private destroySubs: Subject<boolean> = new Subject<boolean>();
+
+  public doughnutChartLabels: Label[] = ['Ingresos', 'Egresos'];
+  public doughnutChartData: MultiDataSet = [[]];
+
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    this.store.select('ingresosEgresos')
+        .pipe(takeUntil(this.destroySubs))
+        .subscribe(({items}) => {
+      this.generarEstadistica(items);
+    });
   }
 
+  ngOnDestroy() {
+    this.destroySubs.next();
+    this.destroySubs.complete();
+  }
+
+  generarEstadistica(items: IngresoEgreso[]) {
+    items.forEach((item) => {
+      if(item.tipo === 'ingreso') {
+        this.totalIngreos += item.monto;
+        this.ingresos++;
+      } else {
+        this.totalEgresos += item.monto;
+        this.egresos++;
+      }
+    });
+
+    this.doughnutChartData = [[this.totalIngreos, this.totalEgresos]];
+  }
 }
