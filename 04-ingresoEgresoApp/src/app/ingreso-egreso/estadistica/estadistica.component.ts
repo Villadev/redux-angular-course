@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {AppState} from "../../app.reducer";
 import {IngresoEgreso} from "../../models/ingreso-egreso.model";
 import {Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
 import {Label, MultiDataSet} from "ng2-charts";
+import {AppStateWithIngresoEgreso} from "../ingreso-egreso.reducer";
 
 @Component({
   selector: 'app-estadistica',
@@ -23,7 +23,7 @@ export class EstadisticaComponent implements OnInit, OnDestroy {
   public doughnutChartLabels: Label[] = ['Ingresos', 'Egresos'];
   public doughnutChartData: MultiDataSet = [[]];
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppStateWithIngresoEgreso>) { }
 
   ngOnInit(): void {
     this.store.select('ingresosEgresos')
@@ -39,6 +39,10 @@ export class EstadisticaComponent implements OnInit, OnDestroy {
   }
 
   generarEstadistica(items: IngresoEgreso[]) {
+    this.totalEgresos = 0;
+    this.totalIngreos = 0;
+    this.ingresos = 0;
+    this.egresos = 0;
     items.forEach((item) => {
       if(item.tipo === 'ingreso') {
         this.totalIngreos += item.monto;

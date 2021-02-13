@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {AppState} from "../../app.reducer";
 import {Store} from "@ngrx/store";
 import {IngresoEgreso} from "../../models/ingreso-egreso.model";
 import {IngresoEgresoService} from "../../services/ingreso-egreso.service";
 import Swal from "sweetalert2";
+import {AppStateWithIngresoEgreso} from "../ingreso-egreso.reducer";
 
 @Component({
   selector: 'app-detalle',
@@ -14,7 +14,7 @@ import Swal from "sweetalert2";
 export class DetalleComponent implements OnInit {
   ingresosEgresos: IngresoEgreso[] = [];
 
-  constructor(private store: Store<AppState>,
+  constructor(private store: Store<AppStateWithIngresoEgreso>,
               private ingresoEgresoService: IngresoEgresoService) { }
 
   ngOnInit(): void {
